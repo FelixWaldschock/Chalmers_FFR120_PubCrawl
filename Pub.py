@@ -21,7 +21,6 @@ class Pub:
 
     def getQueueLength(self, currentTime):
         # queue behaves exponentially decaying
-
         queueMax = self.popularity
 
         queueLength = queueMax * np.exp(-0.1 * (currentTime - self.openingTime))
@@ -30,7 +29,6 @@ class Pub:
 
         return queueLength
     
-        
     
     def getWaitingTime(self, currentTime):
         # waiting time consists of queuelength and opening time
@@ -42,7 +40,8 @@ class Pub:
 
         # if the pub is closed, the waiting time is infinite
         if (self.closingTime < currentTime):
-            waitingTime = np.inf
+            waitingTime = int(10**15)
 
-        return waitingTime
+        return int(waitingTime)
+    
     
