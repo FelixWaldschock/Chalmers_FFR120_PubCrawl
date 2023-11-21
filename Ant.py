@@ -12,3 +12,4 @@ class Ant:
 
     def addToTaboList(self, pubID):
         self.taboList.append(pubID)
+
