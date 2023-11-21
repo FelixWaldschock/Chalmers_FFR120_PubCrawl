@@ -1,4 +1,6 @@
 import numpy as np
+import matplotlib.pyplot as plt
+import Pub
 
 debug = False
 
@@ -199,4 +201,45 @@ def updatePheromoneMatrix(pheromoneMatrix, deltaPheromoneMatrix, rho):
 
         
     return pheromoneMatrix
+
+def initPubs(filePath):
+    pubsList = np.genfromtxt(filePath, delimiter=',', dtype=str, skip_header=1)
+    # init the Pubs 
+    Pubs = []
+    for i in range(pubsList.shape[0]):
+        pubID = pubsList[i][0]
+        openingTime = pubsList[i][1]
+        closingTime = pubsList[i][2]
+        popularity = pubsList[i][3]
+        posX = pubsList[i][4]
+        posY = pubsList[i][5]
+        # create the Pub
+        pub = Pub.Pub(pubID, openingTime, closingTime, popularity, posX, posY)
+        Pubs.append(pub)
+
+    return Pubs
+
+
+def plotPath(path, Pubs):
+    # create the figure that will be returned
+    fig = plt.figure()
+    
+    # get the x and y coordinates of the path
+    x = np.zeros(len(path))
+    y = np.zeros(len(path))
+
+    for i in range(len(path)):
+        x[i] = Pubs[path[i]].posX
+        y[i] = Pubs[path[i]].posY
+
+    # plot the path
+    plt.plot(x, y, '--b')
+
+    # plot the pubs
+    for i in range(len(Pubs)):
+        plt.plot(Pubs[i].posX, Pubs[i].posY, 'ro')
+
+    # return the figure
+    return fig
+
 
