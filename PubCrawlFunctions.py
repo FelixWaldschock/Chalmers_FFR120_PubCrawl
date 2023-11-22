@@ -149,30 +149,43 @@ def getPathLength(Path, pubs):
     return pathLength
 
 def getDeltaPheromoneMatrix(pathCollection, pathLengthCollection):
-    deltaPheromones = np.zeros(pathCollection.shape)
+    deltaPheromones = np.zeros((pathCollection.shape[1], pathCollection.shape[1]))
     # print("deltaPheromones shape", deltaPheromones.shape)
 
-    numberOfAnts = len(pathCollection)
+    numberOfAnts = (pathCollection.shape)[0]
+    # print("Number of ants is", numberOfAnts)
+
+    # print("Pathlength collection shape", pathLengthCollection.shape)
 
     # loop over each ant (k)
     for k in range(numberOfAnts):
         tourLength = pathLengthCollection[k]
         # print("Tour length of ant", k, "is", tourLength)
+        # print("Tour length of ant", k, "is", tourLength)
 
         # get the edges that the ant has visited
         edges = np.zeros((len(pathCollection[k]), 2), dtype=int)
+
+        # print("edges shape", edges.shape)
+
         for i in range(len(pathCollection[k])-1):
             edges[i][0] = int(pathCollection[k][i])
             edges[i][1] = int(pathCollection[k][i+1])
         
-        deltaPheromonesAnt = np.zeros(pathCollection.shape)
+        deltaPheromonesAnt = np.zeros((pathCollection.shape[1], pathCollection.shape[1]))
+
+        # print("deltaPheromonesAnt shape", deltaPheromonesAnt.shape)
 
         # loop over all edges
         for m in range(len(edges)):
             i = edges[m][0]
             j = edges[m][1]
 
-            # print i and j
+
+            # # print pathCollection
+            # print(pathCollection)
+
+            # #print i and j
             # print("i =", i, "j =", j)
 
             deltaPheromonesAnt[i][j] = 1/tourLength

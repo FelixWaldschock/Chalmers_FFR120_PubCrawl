@@ -36,7 +36,7 @@ time = 0
 timeMax = int(60*12)            # 12 hours in minutes - 3pm to 3am 
 iter = 0
 # population size of ants
-popSize = 50
+popSize = 20
 
 # velocity of an ant
 velAnt = 1
@@ -122,8 +122,13 @@ if Plotting:
 Logger.clearLog()
 
 
-while(iter < 1000):
+while(iter < 10000):
     iter += 1
+
+    # give heartbeat
+    if iter % 100 == 0:
+        print("Iteration: ", iter)
+
 
     # Generate paths
     for i in range(popSize):
