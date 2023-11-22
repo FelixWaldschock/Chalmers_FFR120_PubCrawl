@@ -27,7 +27,7 @@ waitingTimes = PCF.getWaitingVector(Pubs, 0)
 # simulation paramters
 tau0 = 1
 alpha = 1
-beta = 1
+beta = 2
 gamma = 1 
 rho = 0.2
 
