@@ -2,6 +2,7 @@ import numpy as np
 
 class Pub:
     pubID = None
+    pubName = None
     openingTime = None
     closingTime = None
     popularity = None
@@ -10,8 +11,9 @@ class Pub:
 
 
     
-    def __init__(self, pubID, openingTime, closingTime, popularity, posX, posY):
+    def __init__(self, pubID, pubName, openingTime, closingTime, popularity, posX, posY):
         self.pubID = int(pubID)
+        self.pubName = str(pubName)
         self.openingTime = int(openingTime)
         self.closingTime = int(closingTime)
         self.popularity = int(popularity)
