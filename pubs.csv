@@ -1,10 +1,20 @@
-﻿ID,OpeningTime,ClosingTime,Popularity,PosX,PosY
-1,60,600,50,10,10
-2,10,600,3,30,90
-3,100,500,3,50,30
-4,0,300,4,10,20
-5,0,100,1,40,30
-6,0,100,1,60,20
-7,0,100,1,70,90
-8,0,100,1,20,10
-9,0,100,1,15,20
+﻿Name,ID,,OpeningTime,ClosingTime,Popularity,PosX,PosY,
+Cafe Bulten,1,,180,600,50,10,10,
+J.A. Pripps,2,,0,600,3,30,90,
+Wijkanders,3,,0,420,3,50,30,
+Gasque,4,,300,600,4,10,20,
+Cafe C (Lindholmen),5,,0,270,1,40,30,
+Kajsabaren,6,,120,600,1,60,20,
+Röda Rummet,7,,240,720,1,70,90,
+V-entrén,8,,240,720,1,20,10,
+Basen,9,,240,600,1,15,20,
+Golden-I,,,240,720,,,,
+Focus,,,240,720,,,,
+Hubben 2.2,,,120,660,,,,
+Fort NOx,,,240,600,,,,
+Gastown & Spritköket,,,240,600,,,,
+Winden,,,240,720,,,,
+Järnvägspub,,,180,600,,,,
+Zaloonen,,,240,600,,,,
+11:an,,,0,270,,,,
+Kalle Glader,,,210,570,,,,
