@@ -11,12 +11,10 @@ plt.style.use(['science','grid'])
 
 # import custom modules
 import Pub
-import PubCrawlFunctions as PCF
+import PubCrawlFunctions_withoutTime as PCF
 import Ant
 import Logger
 import randomPubsInit
-
-# %%
 
 # %%
 # Use the random pubs
@@ -37,7 +35,7 @@ time = 0
 timeMax = int(60*12)            # 12 hours in minutes - 3pm to 3am 
 iter = 0
 # population size of ants
-popSize = 5
+popSize = 50
 
 # velocity of an ant
 velAnt = 1
@@ -47,7 +45,6 @@ velAnt = 1
 # init the pheromone matrix which is a 2D array with the size of the number of pubs
 pheromoneMatrix = np.ones((len(Pubs), len(Pubs)))
 pheromoneMatrix = pheromoneMatrix * tau0
-
 
 # the visibility matrix is in this case not only the distance between the pubs, but also takes into consideration
 # the waiting time at the next pub
@@ -71,9 +68,6 @@ visibilityMatrix = 1 / distanceMatrix
 
 # %%
 
-
-
-
 def print_memory_usage():
     memory = psutil.virtual_memory()
     print(f"Used Memory: {memory.used / (1024 ** 3):.2f} GB")
@@ -92,8 +86,6 @@ Plotting = True
 
 if Plotting:
     # create a figure with 2 subplots, left the path, right the pheromone matrix
-
-
     fig, axs = plt.subplots(1, 3, figsize=(15, 5))
     fig.suptitle('Pub Crawl')
 
@@ -129,7 +121,6 @@ if Plotting:
 
 # clear the log file
 Logger.clearLog()
-
 
 while(iter < 5000):
     iter += 1

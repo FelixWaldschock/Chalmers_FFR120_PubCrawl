@@ -195,8 +195,6 @@ def getDeltaPheromoneMatrix(pathCollection, pathLengthCollection):
     return deltaPheromones
 
 
-
-
 def updatePheromoneMatrix(pheromoneMatrix, deltaPheromoneMatrix, rho):
     Threshold = int(10e-15)
 
