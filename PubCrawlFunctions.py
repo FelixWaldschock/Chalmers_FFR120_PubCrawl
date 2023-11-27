@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import Pub
 
-debug = False
+debug = True
 
 def getDistance(pub1, pub2):
     x1 = pub1.posX
@@ -37,14 +37,22 @@ def getNextNode(pheromoneMatrix, visibilityMatrix, tabuList, alpha, beta, gamma,
             pheromonePart = (pheromoneMatrix[currentPosition, i])
             # tmp2 -> visibility of the edge i->j
             visibilityPart = (visibilityMatrix[currentPosition,i])
-            
-            
+                        
             # tmp3 -> waiting time at pub j
             # catch division by zero
             if (Pubs[i].getWaitingTime(Ant.getTime()) == 0):
                 waitingTimePart = 1
             else:
                 waitingTimePart = 1 / (Pubs[i].getWaitingTime(Ant.getTime()))
+
+
+            if (debug):
+                # inform user over the values
+                print("pheromonePart", pheromonePart)
+                print("visibilityPart", visibilityPart)
+                print("waitingTimePart", waitingTimePart)
+
+
 
             tmp1 = pheromonePart ** alpha
             tmp2 = (visibilityPart + waitingTimePart) ** beta
@@ -54,15 +62,15 @@ def getNextNode(pheromoneMatrix, visibilityMatrix, tabuList, alpha, beta, gamma,
                 exit()
             numerator[i] = tmp3
 
-    if (debug):
-        if (np.sum(numerator) == 0):
-            print("Numerator is zero", numerator)
-            print("Current position is", currentPosition)
-            print("i is", i)
-            print("Tabu list is", tabuList)
-            print("Pheromone level is", pheromoneMatrix[currentPosition, i])
-            print("Visibility is", visibilityMatrix[currentPosition,i])
-            exit
+    # if (debug):
+    #     if (np.sum(numerator) == 0):
+    #         print("Numerator is zero", numerator)
+    #         print("Current position is", currentPosition)
+    #         print("i is", i)
+    #         print("Tabu list is", tabuList)
+    #         print("Pheromone level is", pheromoneMatrix[currentPosition, i])
+    #         print("Visibility is", visibilityMatrix[currentPosition,i])
+    #         exit
 
 
   
@@ -118,14 +126,10 @@ def generatePath(pheromoneMatrix, visibilityMatrix, alpha, beta, gamma, Pubs, An
     for i in range(len(pheromoneMatrix)-1):
         nextNode = getNextNode(pheromoneMatrix, visibilityMatrix, tabuList, alpha, beta, gamma, Pubs, Ant)
 
-        if(debug):
-            print("Next node is", nextNode)
 
         # update the tabu list
         tabuList.append(nextNode)
 
-        if (debug):
-            print("Tabu list is", tabuList)
 
     Path = tabuList
 
