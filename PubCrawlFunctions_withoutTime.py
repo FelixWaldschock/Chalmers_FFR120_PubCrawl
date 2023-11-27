@@ -224,6 +224,7 @@ def initPubs(filePath):
         popularity = pubsList[i][4]
         posX = pubsList[i][5]
         posY = pubsList[i][6]
+        
         # create the Pub
         pub = Pub.Pub(pubID, pubName, openingTime, closingTime, popularity, posX, posY)
         Pubs.append(pub)

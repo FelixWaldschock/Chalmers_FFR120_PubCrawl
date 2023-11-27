@@ -4,12 +4,13 @@ import os
 fileName = "randomPubs.csv"
 
 # Populate the pubs.csv file with random values in the ranges
-numberOfPubs = 50
+numberOfPubs = 10
 xRange = [0, 1000]
 yRange = [0, 1000]
 openingTimeRange = [0, 12*60-100]
 closingTimeRange = [100, 12*60]
 populatity = [1, 20]
+peakTime = [0, 12*60-100]
 
 
 # delete the file if it exists
@@ -20,7 +21,7 @@ if(os.path.exists(fileName)):
 file = open(fileName, "a")
 
 # write the header
-header = "ID,OpeningTime,ClosingTime,Popularity,PosX,PosY"
+header = "ID,OpeningTime,ClosingTime,Popularity,PosX,PosY,PeakTime"
 file.write(header)
 
 # random pub names
@@ -176,6 +177,11 @@ for i in range(numberOfPubs):
 
     # write the closing time
     closingTime = np.random.randint(closingTimeRange[0], closingTimeRange[1])
+
+    # closing time must be larger than opening time
+    while(closingTime < openingTime):
+        closingTime = np.random.randint(closingTimeRange[0], closingTimeRange[1])
+
     file.write(str(closingTime))
     file.write(",")
 
@@ -192,6 +198,18 @@ for i in range(numberOfPubs):
     # write the y position
     posY = np.random.randint(yRange[0], yRange[1])
     file.write(str(posY))
+    file.write(",")
+
+    # # write the peak time
+    peakTimeT = np.random.randint(peakTime[0], peakTime[1])
+
+    # peak time must be between opening and closing time
+    while(peakTimeT < openingTime or peakTimeT > closingTime):
+        peakTimeT = np.random.randint(peakTime[0], peakTime[1])
+
+
+    file.write(str(peakTimeT))
+
 
 # close the file
 file.close()

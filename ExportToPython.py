@@ -36,6 +36,7 @@ rho = 0.2
 time = 0
 timeMax = int(60*12)            # 12 hours in minutes - 3pm to 3am 
 iter = 0
+maxIter = 10000
 # population size of ants
 popSize = 5
 
@@ -44,7 +45,7 @@ velAnt = 1
 
 
 # %%
-# init the pheromone matrix which is a 2D array with the size of the number of pubs
+# init the pheromone matrix which is a 2D array with the size of the number of pubspheromoneMatrix = np.ones((len(Pubs), len(Pubs)))
 pheromoneMatrix = np.ones((len(Pubs), len(Pubs)))
 pheromoneMatrix = pheromoneMatrix * tau0
 
@@ -72,8 +73,6 @@ visibilityMatrix = 1 / distanceMatrix
 # %%
 
 
-
-
 def print_memory_usage():
     memory = psutil.virtual_memory()
     print(f"Used Memory: {memory.used / (1024 ** 3):.2f} GB")
@@ -87,6 +86,7 @@ pathLengthCollection = np.zeros((popSize, 1))
 
 minimumPathLength = int(10e15)
 minimumPath = np.zeros(len(Pubs))
+bestAnt = None
 
 Plotting = True
 
@@ -131,7 +131,9 @@ if Plotting:
 Logger.clearLog()
 
 
-while(iter < 5000):
+## Main algorithm
+
+while(iter < maxIter):
     iter += 1
 
     # give heartbeat
@@ -143,9 +145,10 @@ while(iter < 5000):
     # Generate paths
     for i in range(popSize):
         # create an Ant
-        ant = Ant.Ant(velAnt)
-        path = PCF.generatePath(pheromoneMatrix, visibilityMatrix, waitingTimes, alpha, beta, gamma, Pubs)
-        pathLength = PCF.getPathLength(path, Pubs)
+        ant = Ant.Ant(velocity=1)
+        path = PCF.generatePath(pheromoneMatrix, visibilityMatrix, alpha, beta, gamma, Pubs, ant)
+        #pathLength = PCF.getPathLength(path, Pubs)
+        pathLength = PCF.getPathDuration(ant)
         # pathDuration = PCF.getPathDuration(path, Pubs, ant)
         
 
@@ -153,13 +156,15 @@ while(iter < 5000):
         if pathLength < minimumPathLength:
             minimumPathLength = pathLength
             minimumPath = path
+            minimumPathTimeTrajectory = ant.timedPath
+            bestAnt = ant
 
             # inform the user
             # print('New minimum path found, in iteration: ', minimumPathLength, iter)
             # print("Path: ", minimumPath)
 
             # log the new minimum path
-            Logger.logBestPath(minimumPath, minimumPathLength)
+            Logger.logBestPath(minimumPath, minimumPathTimeTrajectory, minimumPathLength)
 
             if Plotting:
                 # update scatter plot
@@ -200,45 +205,38 @@ while(iter < 5000):
     pheromoneMatrix = PCF.updatePheromoneMatrix(pheromoneMatrix, deltaPheromoneMatrix, rho)
 
 
-
-# # %%
-# # plot the best path
-# # load the best path from the log files
-
-# counter = 4
-
-# bestPathPath = "Logs/BestPath_" + str(counter) + ".csv"
-# # read the last line of the file
-# with open(bestPathPath, 'r') as f:
-#     lines = f.readlines()
-#     last_line = lines[-1]
-#     bestPath = last_line
+# save the figure
+if Plotting:
+    plt.savefig('PubCrawl.png')
 
 
-# # parse the bestPath, the first element is before the "," the second after
-# bestPathOrigin = bestPath.split(',')
-# # convert the first element to an array of intergers, delimited by ;
-# bestPath = np.array(bestPathOrigin[0].split(';')).astype(int)
-# bestPathLength = bestPathOrigin[1]
+# while no keyboard interrupt
+try:
+    while(True):
 
-# # plot the best path
-# fig = PCF.plotPath(bestPath, Pubs)
-# plt.title('Best Path')
-# plt.xlabel('x')
-# plt.ylabel('y')
-# plt.show()
+        # close the figure
+        plt.close(fig)
+
+        # create a fig where the best ant is used. Horizontal axis is time, vertical axis is the pubs
+        fig, axs = plt.subplots(1, 1, figsize=(15, 5))
+        fig.suptitle('Pub Crawl')
+
+        # plot a scatter with y axis is the pub ID and x axis is the time. Data can be extracted from the bestAnt object, 
+        # where the timedPath is stored. First element of timedPath is the pubID, second element is the time
+        x = [pubID[1] for pubID in bestAnt.timedPath]
+        y = [pubID[0] for pubID in bestAnt.timedPath]
 
 
+        axs.scatter(x, y)
+        
+        plt.show()
 
-# # %%
-# print('Distance Matrix: ', distanceMatrix)
 
-# print('Pheromone Matrix: ', pheromoneMatrix)
-
-# print('Waiting vector: ', PCF.getWaitingVector(Pubs, time))
-
-# print('Waiting vector: ', PCF.getWaitingVector(Pubs, 100))
+except KeyboardInterrupt:
+    print("Keyboard interrupt")
 
 
 
 
+
+# %%

@@ -10,7 +10,7 @@ np.savetxt(counter, [np.loadtxt(counter, dtype=int)+1], fmt='%i')
 # log the best found path
 # append it to the csv file 
 # first column being the path, where all elements are seperated by ;, and the second column being the path length
-def logBestPath(path, pathLength):
+def logBestPath(path, timedPath, pathLength):
     # open the file
     file = open(logFileName, "a")
 
@@ -18,6 +18,13 @@ def logBestPath(path, pathLength):
     for i in range(len(path)):
         file.write(str(path[i]))
         if(i < len(path)-1):
+            file.write(";")
+    file.write(",")
+
+    # write the timed path
+    for i in range(len(timedPath)):
+        file.write(str(timedPath[i]))
+        if(i < len(timedPath)-1):
             file.write(";")
     file.write(",")
 

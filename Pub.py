@@ -22,32 +22,30 @@ class Pub:
 
     def getQueueLength(self, currentTime):
         # gaussian distribution with the mean = peakTime
-        sigma = 1
+        sigma = 40
         mu = self.peakTime
-        queueLength = self.popularity * 1/(np.sqrt(2)) * np.exp(-0.5 * ((currentTime - mu)/sigma)**2)
-
-        return queueLength
-
-        # # queue behaves exponentially decaying
-        # queueMax = self.popularity
-
-        # queueLength = queueMax * np.exp(-0.1 * (currentTime - self.openingTime))
-        # if queueLength > queueMax:
-        #     queueLength = queueMax
-
-        # return queueLength
+        term1 = 100 * self.popularity
+        term2 = np.exp(-0.5 * ((currentTime - mu)/sigma)**2)
+        queueLength = term1 * term2
+        # print("Term1: ", term1)
+        # print("Term2: ", term2)
+        # print("Queue Length: ", queueLength)
+        return int(queueLength)
     
     def getWaitingTime(self, currentTime):
         # waiting time consists of queuelength and opening time
         waitingTime = 0
+
+        # if pub is not open yet, add the delta until the opening time
         if (self.openingTime > currentTime):
             waitingTime += self.openingTime - currentTime
         
+        # add the waiting time of the queue
         waitingTime += self.getQueueLength(currentTime)
 
         # if the pub is closed, the waiting time is infinite
         if (self.closingTime < currentTime):
-            waitingTime = int(10**15)
+            waitingTime = int(10**6)
 
         return int(waitingTime)
         
