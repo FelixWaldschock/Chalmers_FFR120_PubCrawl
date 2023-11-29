@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import Pub
 
-debug = True
+debug = False
 
 def getDistance(pub1, pub2):
     x1 = pub1.posX
@@ -117,8 +117,6 @@ def generatePath(pheromoneMatrix, visibilityMatrix, alpha, beta, gamma, Pubs, An
     for i, p in enumerate(Pubs):
         waitingTimeVector[i] = p.getWaitingTime(time)
 
-
-
     # add the starting node to the tabo list
     tabuList.append(currentNode)
 
@@ -178,8 +176,12 @@ def getDeltaPheromoneMatrix(pathCollection, pathLengthCollection):
 
     # loop over each ant (k)
     for k in range(numberOfAnts):
-        tourLength = pathLengthCollection[k]
+        # get the tour length of the ant -> For distance optimization
+        ### tourLength = pathLengthCollection[k]
         
+        # get tour duration of the ant -> For time optimization
+
+
         # get the edges that the ant has visited
         edges = np.zeros((len(pathCollection[k]), 2), dtype=int)
 
