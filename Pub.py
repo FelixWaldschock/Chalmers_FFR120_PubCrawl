@@ -22,7 +22,7 @@ class Pub:
 
     def getQueueLength(self, currentTime):
         # gaussian distribution with the mean = peakTime
-        sigma = 40
+        sigma = 70
         mu = self.peakTime
         term1 = 100 * self.popularity
         term2 = np.exp(-0.5 * ((currentTime - mu)/sigma)**2)

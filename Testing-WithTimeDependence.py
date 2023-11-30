@@ -19,7 +19,7 @@ import Logger
 # simulation paramters
 tau0 = 1
 alpha = 1
-beta = 3
+beta = 2
 rho = 0.01
 
 # simulation counters
@@ -37,11 +37,6 @@ velAnt = int(5000 / 60)         # 5km/h in m/min
 # %%
 Pubs = PCF.initPubs('pubs.csv')
 
-# set all pub popularities to 1
-for pub in Pubs:
-    pub.popularity = pub.popularity * 5
-
-print()
 
 # init the pheromone matrix which is a 2D array with the size of the number of pubs
 pheromoneMatrix = np.ones((len(Pubs), len(Pubs)))
@@ -105,7 +100,8 @@ if Plotting:
     axs[1].set_title('Pheromone Matrix')
 
     # create a third figure where the pathLength is y and the iteration is x
-    pathLengthPlot, = axs[2].plot([], [], '--x')
+    # pathLengthPlot, = axs[2].plot([], [], '--x')
+    pathLengthPlot, = axs[2].semilogy([], [], '--x')
     axs[2].set_title('Path Length')
     axs[2].set_xlabel('Iteration')
     axs[2].set_ylabel('Path Length')
@@ -147,7 +143,7 @@ while(iter < maxIter):
             bestAnt = ant
 
             # # inform the user
-            # print('New minimum path found, in iteration: ', minimumPathLength, iter)
+            print('New minimum path found, in iteration: ', minimumPathLength, iter)
             # print("Path: ", minimumPath)
             # print("Name of pubs: ", [Pubs[pubID].pubName for pubID in minimumPath])
             # print("Pheromone  min: ", np.min(pheromoneMatrix))
