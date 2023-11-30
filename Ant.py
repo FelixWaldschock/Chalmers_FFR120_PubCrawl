@@ -4,7 +4,7 @@ class Ant:
     # has a tabo list of visited pubs
     taboList = None
     time = 0
-    velocity = 1
+    velocity = 83.3
 
     # variable to store the path
     path = None

@@ -20,7 +20,6 @@ def getWaitingVector(pubs, time):
 
 
 def getNextNode(pheromoneMatrix, visibilityMatrix, tabuList, alpha, beta, Pubs, Ant):
-
     # get current position
     currentPosition = tabuList[-1]
     probabilities = np.zeros(len(pheromoneMatrix))
@@ -45,14 +44,11 @@ def getNextNode(pheromoneMatrix, visibilityMatrix, tabuList, alpha, beta, Pubs, 
             else:
                 waitingTimePart = 1 / (Pubs[i].getWaitingTime(Ant.getTime()))
 
-
             if (debug):
                 # inform user over the values
                 print("pheromonePart", pheromonePart)
                 print("visibilityPart", visibilityPart)
                 print("waitingTimePart", waitingTimePart)
-
-
 
             tmp1 = pheromonePart ** alpha
             tmp2 = (visibilityPart + waitingTimePart) ** beta
@@ -80,15 +76,16 @@ def getNextNode(pheromoneMatrix, visibilityMatrix, tabuList, alpha, beta, Pubs, 
     # calculate the probabilities
     probabilities = numerator/denominator
 
- 
     # select the next node
     node = rouletteWheelSelection(probabilities)
 
     # update the time
     # waitingTime + travelTime + beerTime  
     waitingTime = Pubs[node].getWaitingTime(Ant.getTime())
-    travelTime = getDistance(Pubs[currentPosition], Pubs[node])/Ant.getVelocity()
-    deltaTime = waitingTime + travelTime
+    travelTime = (getDistance(Pubs[currentPosition], Pubs[node])) / 83.3
+    beerTime = 5
+    deltaTime = waitingTime + travelTime + beerTime
+    # print(deltaTime)
     
     # update the time
     Ant.setTime(Ant.getTime() + deltaTime)
@@ -115,13 +112,9 @@ def generatePath(pheromoneMatrix, visibilityMatrix, alpha, beta, Pubs, Ant):
 
     # pick a random pub from the starting pubs
     currentNode = np.random.choice(startingPubs)
-    # print(currentNode)
-    # currentNode = currentNode.pubID
-
-    # currentNode = np.random.randint(len(pheromoneMatrix))
-
+ 
     # update the timedPath
-    Ant.timedPath.append((currentNode, Ant.getTime()))
+    Ant.timedPath.append([currentNode, Ant.getTime()])
 
     # determine the waiting time vector
     waitingTimeVector = np.zeros(len(Pubs))

@@ -45,7 +45,7 @@ class Pub:
 
         # if the pub is closed, the waiting time is infinite
         if (self.closingTime < currentTime):
-            waitingTime = int(10**6)
+            waitingTime = 7200
 
         return int(waitingTime)
         
