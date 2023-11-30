@@ -178,7 +178,7 @@ def getDeltaPheromoneMatrix(pathCollection, pathLengthCollection):
     for k in range(numberOfAnts):
         # get the tour length of the ant -> For distance optimization
         tourLength = pathLengthCollection[k]
-        
+
         # get tour duration of the ant -> For time optimization
 
 
