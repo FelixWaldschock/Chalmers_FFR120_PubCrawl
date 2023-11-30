@@ -1,11 +1,11 @@
-ID,,OpeningTime,ClosingTime,Popularity,PosX,PosY,PeakTime
-0,Velvet Tankard,600,673,10,334,777,618
-1,Eccentric Haven,500,692,5,140,419,570
-2,Whispering Willow,491,613,7,648,279,543
-3,Posh Pint,175,200,7,7,292,178
-4,Enchanted Emporium,205,297,1,484,81,217
-5,Majestic Boudoir,370,631,8,436,604,522
-6,Renaissance Sanctuary,370,572,6,905,52,493
-7,Celestial Tavern,561,625,4,558,655,601
-8,Opulent Den,128,720,7,326,662,232
-9,Velvet Lounge,107,598,2,488,748,369
+ID,OpeningTime,ClosingTime,Popularity,PosX,PosY,PeakTime
+0,Velvet Tankard,213,374,18,52,43,277
+1,Eccentric Haven,315,630,5,190,513,455
+2,Whispering Willow,557,655,5,889,243,610
+3,Posh Pint,279,627,6,665,811,529
+4,Enchanted Emporium,435,698,6,838,338,506
+5,Majestic Boudoir,606,682,2,571,967,617
+6,Renaissance Sanctuary,496,560,13,353,999,559
+7,Celestial Tavern,570,702,13,878,58,573
+8,Opulent Den,62,635,10,626,725,526
+9,Velvet Lounge,179,376,4,315,143,188

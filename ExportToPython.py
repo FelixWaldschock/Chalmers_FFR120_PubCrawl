@@ -20,7 +20,7 @@ import randomPubsInit
 
 # %%
 # Use the random pubs
-Pubs = PCF.initPubs('RandomPubs.csv')
+Pubs = PCF.initPubs('pubs.csv')
 
 waitingTimes = PCF.getWaitingVector(Pubs, 0)
 

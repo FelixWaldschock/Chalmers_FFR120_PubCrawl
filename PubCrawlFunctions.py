@@ -19,7 +19,7 @@ def getWaitingVector(pubs, time):
     return waitingVector
 
 
-def getNextNode(pheromoneMatrix, visibilityMatrix, tabuList, alpha, beta, gamma, Pubs, Ant):
+def getNextNode(pheromoneMatrix, visibilityMatrix, tabuList, alpha, beta, Pubs, Ant):
 
     # get current position
     currentPosition = tabuList[-1]
@@ -94,20 +94,31 @@ def getNextNode(pheromoneMatrix, visibilityMatrix, tabuList, alpha, beta, gamma,
     Ant.setTime(Ant.getTime() + deltaTime)
 
     # update the timedPath
-    Ant.timedPath.append((node, Ant.getTime()))
+    Ant.timedPath.append([node, Ant.getTime()])
 
     return node
 
 
-def generatePath(pheromoneMatrix, visibilityMatrix, alpha, beta, gamma, Pubs, Ant):
+def generatePath(pheromoneMatrix, visibilityMatrix, alpha, beta, Pubs, Ant):
     # start the time counter
     time = Ant.getTime()
 
     # init the tabu list
     tabuList = []
 
-    # select a random starting node
-    currentNode = np.random.randint(len(pheromoneMatrix))
+    # select a random starting node, which is a pub that has a opening time = 0
+    # find all pubs that have an opening time = 0
+    startingPubs = []
+    for i in range(len(Pubs)):
+        if (Pubs[i].openingTime == 0):
+            startingPubs.append(i)
+
+    # pick a random pub from the starting pubs
+    currentNode = np.random.choice(startingPubs)
+    # print(currentNode)
+    # currentNode = currentNode.pubID
+
+    # currentNode = np.random.randint(len(pheromoneMatrix))
 
     # update the timedPath
     Ant.timedPath.append((currentNode, Ant.getTime()))
@@ -122,7 +133,7 @@ def generatePath(pheromoneMatrix, visibilityMatrix, alpha, beta, gamma, Pubs, An
 
     # build the tour
     for i in range(len(pheromoneMatrix)-1):
-        nextNode = getNextNode(pheromoneMatrix, visibilityMatrix, tabuList, alpha, beta, gamma, Pubs, Ant)
+        nextNode = getNextNode(pheromoneMatrix, visibilityMatrix, tabuList, alpha, beta, Pubs, Ant)
 
 
         # update the tabu list
