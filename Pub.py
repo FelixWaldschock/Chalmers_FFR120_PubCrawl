@@ -9,8 +9,9 @@ class Pub:
     posX = None
     posY = None
     peakTime = None
+    sigma = None
 
-    def __init__(self, pubID, pubName, openingTime, closingTime, popularity, posX, posY, peakTime):
+    def __init__(self, pubID, pubName, openingTime, closingTime, popularity, posX, posY, peakTime, sigma):
         self.pubID = int(pubID)
         self.pubName = str(pubName)
         self.openingTime = int(openingTime)
@@ -19,10 +20,11 @@ class Pub:
         self.posX = int(posX)
         self.posY = int(posY)
         self.peakTime = int(peakTime)
+        self.sigma = int(sigma)
 
     def getQueueLength(self, currentTime):
         # gaussian distribution with the mean = peakTime
-        sigma = 70
+        sigma = self.sigma
         mu = self.peakTime
         term1 = 100 * self.popularity
         term2 = np.exp(-0.5 * ((currentTime - mu)/sigma)**2)

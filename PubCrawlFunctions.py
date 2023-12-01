@@ -244,8 +244,9 @@ def initPubs(filePath):
         posX = pubsList[i][5]
         posY = pubsList[i][6]
         peakTime = pubsList[i][7]
+        sigma = pubsList[i][8]
         # create the Pub
-        pub = Pub.Pub(pubID, pubName, openingTime, closingTime, popularity, posX, posY, peakTime)
+        pub = Pub.Pub(pubID, pubName, openingTime, closingTime, popularity, posX, posY, peakTime, sigma)
         Pubs.append(pub)
 
     return Pubs

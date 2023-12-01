@@ -33,7 +33,6 @@ popSize = 50
 # velocity of an ant
 velAnt = int(5000 / 60)         # 5km/h in m/min
 
-
 # %%
 Pubs = PCF.initPubs('pubs.csv')
 
