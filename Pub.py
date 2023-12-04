@@ -29,14 +29,16 @@ class Pub:
         term1 = 100 * self.popularity
         term2 = np.exp(-0.5 * ((currentTime - mu)/sigma)**2)
         queueLength = term1 * term2
-        # print("Term1: ", term1)
-        # print("Term2: ", term2)
-        # print("Queue Length: ", queueLength)
+
         return int(queueLength)
     
     def getWaitingTime(self, currentTime):
         # waiting time consists of queuelength and opening time
         waitingTime = 0
+
+        term1 = 100 * self.popularity
+        term2 = np.exp(-0.5 * ((currentTime - self.openingTime)/self.sigma)**2)
+        queueLength = term1 * term2
 
         # if pub is not open yet, add the delta until the opening time
         if (self.openingTime > currentTime):

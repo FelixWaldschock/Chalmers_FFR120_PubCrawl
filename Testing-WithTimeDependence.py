@@ -19,7 +19,7 @@ import Logger
 # simulation paramters
 tau0 = 1
 alpha = 1
-beta = 2
+beta = 5
 rho = 0.01
 
 # simulation counters
@@ -189,7 +189,10 @@ while(iter < maxIter):
     deltaPheromoneMatrix = PCF.getDeltaPheromoneMatrix(pathCollection, pathDurationCollection)
     pheromoneMatrix = PCF.updatePheromoneMatrix(pheromoneMatrix, deltaPheromoneMatrix, rho)
 
-
+    # adaptive alpha and beta
+    # if(pathDuration < 720):
+    #     beta = 5
+    #     alpha = 6
 
 
 # %%
