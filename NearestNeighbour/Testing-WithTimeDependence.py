@@ -239,7 +239,7 @@ axs[2].text(0.95, 0.25, r'$\textbf{Population size}$: ' + str(popSize) +
             bbox={'facecolor': 'white', 'alpha': 0.5, 'pad': 10},
             usetex=True)
 if Plotting:
-    plt.savefig('NearestNeighbour_PubCrawl_1.png', dpi=300)
+    plt.savefig('NearestNeighbour_PubCrawl.svg', format='svg')
     print("Figure saved")
 
 
