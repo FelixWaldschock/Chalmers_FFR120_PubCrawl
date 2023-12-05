@@ -19,55 +19,123 @@ def getWaitingVector(pubs, time):
     return waitingVector
 
 
-def getNextNode(pheromoneMatrix, visibilityMatrix, travelTimeMatrix, tabuList, alpha, beta, Pubs, Ant, givenPath):
-    beerTime = 5
-
+def getNextNode(pheromoneMatrix, visibilityMatrix, tabuList, alpha, beta, Pubs, Ant):
+    # get current position
     currentPosition = tabuList[-1]
-    node = givenPath[0]
-    givenPath.remove(node)
+    probabilities = np.zeros(len(pheromoneMatrix))
+    
+    # calculate the numerator
+    numerator = np.zeros(len(pheromoneMatrix))
 
+    # loop over all nodes
+    for i in range(len(probabilities)):
+        # check if node is in tabu list
+        if i not in tabuList:
+            #numerator[i] = (pheromoneMatrix[currentPosition, i]**alpha)*(visibilityMatrix[currentPosition,i]**beta)*(waitingTimeVector[i]**gamma)
+            # tmp1 -> pheromone level of the edge i->j
+            pheromonePart = (pheromoneMatrix[currentPosition, i])
+            # tmp2 -> visibility of the edge i->j
+            visibilityPart = (visibilityMatrix[currentPosition,i])
+                        
+            # tmp3 -> waiting time at pub j
+            # catch division by zero
+            if (Pubs[i].getWaitingTime(Ant.getTime()) == 0):
+                waitingTimePart = 1
+            else:
+                waitingTimePart = 1 / (Pubs[i].getWaitingTime(Ant.getTime()))
+
+            if (debug):
+                # inform user over the values
+                print("pheromonePart", pheromonePart)
+                print("visibilityPart", visibilityPart)
+                print("waitingTimePart", waitingTimePart)
+
+            tmp1 = pheromonePart ** alpha
+            tmp2 = (visibilityPart + waitingTimePart) ** beta
+            tmp3 = tmp1 * tmp2
+            if (tmp3 == 0):
+                " Print error in getNextNode calculation"
+                exit()
+            numerator[i] = tmp3
+
+    # if (debug):
+    #     if (np.sum(numerator) == 0):
+    #         print("Numerator is zero", numerator)
+    #         print("Current position is", currentPosition)
+    #         print("i is", i)
+    #         print("Tabu list is", tabuList)
+    #         print("Pheromone level is", pheromoneMatrix[currentPosition, i])
+    #         print("Visibility is", visibilityMatrix[currentPosition,i])
+    #         exit
+
+
+  
+    # calculate the denominator
+    denominator = np.sum(numerator)
+
+    # calculate the probabilities
+    probabilities = numerator/denominator
+
+    # select the next node
+    node = rouletteWheelSelection(probabilities)
+
+    # update the time
+    # waitingTime + travelTime + beerTime  
     waitingTime = Pubs[node].getWaitingTime(Ant.getTime())
-
+    travelTime = (getDistance(Pubs[currentPosition], Pubs[node])) / 83.3
     beerTime = 5
-    travelPart = travelTimeMatrix[currentPosition, node]
-    deltaTime = waitingTime + travelPart + beerTime
-
+    deltaTime = waitingTime + travelTime + beerTime
+    # print(deltaTime)
+    
     # update the time
     Ant.setTime(Ant.getTime() + deltaTime)
 
     # update the timedPath
     Ant.timedPath.append([node, Ant.getTime()])
 
-    return node, givenPath
+    return node
 
 
-def generatePath(pheromoneMatrix, visibilityMatrix, travelTimeMatrix, alpha, beta, Pubs, Ant):
+def generatePath(pheromoneMatrix, visibilityMatrix, alpha, beta, Pubs, Ant):
     # start the time counter
     time = Ant.getTime()
 
-    givenPath = [17,4,2,1,5,18,15,7,6,0,3,14,13,12,9,16,8,11,10]
-
+    # init the tabu list
     tabuList = []
-    currentNode = givenPath[0]
-    givenPath.remove(currentNode)
 
+    # select a random starting node, which is a pub that has a opening time = 0
+    # find all pubs that have an opening time = 0
+    startingPubs = []
+    for i in range(len(Pubs)):
+        if (Pubs[i].openingTime == 0):
+            startingPubs.append(i)
+
+    # pick a random pub from the starting pubs
+    currentNode = np.random.choice(startingPubs)
  
     # update the timedPath
     Ant.timedPath.append([currentNode, Ant.getTime()])
 
+    # determine the waiting time vector
+    waitingTimeVector = np.zeros(len(Pubs))
+    for i, p in enumerate(Pubs):
+        waitingTimeVector[i] = p.getWaitingTime(time)
+
+    # add the starting node to the tabo list
     tabuList.append(currentNode)
 
     # build the tour
     for i in range(len(pheromoneMatrix)-1):
-        nextNode, givenPath = getNextNode(pheromoneMatrix, visibilityMatrix, travelTimeMatrix, tabuList, alpha, beta, Pubs, Ant, givenPath)
+        nextNode = getNextNode(pheromoneMatrix, visibilityMatrix, tabuList, alpha, beta, Pubs, Ant)
+
+
+        # update the tabu list
         tabuList.append(nextNode)
+
 
     Path = tabuList
 
     return Path
-
-
-
 
 def rouletteWheelSelection(Vector):
     # make a cumsum of the vector
@@ -77,6 +145,10 @@ def rouletteWheelSelection(Vector):
 
     # generate a random number between 0 and 1
     r = np.random.rand()
+
+    # if(debug):
+    #     print("r =", r)
+    #     print("cumsum =", cumsum)
 
     # find the index of the cumsum using searchsorted
     index = np.searchsorted(cumsum, r)
@@ -89,6 +161,9 @@ def getPathLength(Path, pubs):
 
     # loop over all nodes in the path
     for i in range(len(Path)-1):
+
+        # if(debug):
+        #     print("Distance between pub", Path[i], "and pub", Path[i+1])
 
         distance = getDistance(pubs[Path[i]], pubs[Path[i+1]])
         # add the distance to the path length
@@ -107,6 +182,9 @@ def getDeltaPheromoneMatrix(pathCollection, pathLengthCollection):
     for k in range(numberOfAnts):
         # get the tour length of the ant -> For distance optimization
         tourLength = pathLengthCollection[k]
+
+        # get tour duration of the ant -> For time optimization
+
 
         # get the edges that the ant has visited
         edges = np.zeros((len(pathCollection[k]), 2), dtype=int)
