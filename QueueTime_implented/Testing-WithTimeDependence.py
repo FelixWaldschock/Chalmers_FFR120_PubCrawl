@@ -19,7 +19,7 @@ import Logger
 # %%
 
 # population size of ants
-popSize = 50
+popSize = 19
 NNDistance = 18.47
 
 # simulation paramters
@@ -95,7 +95,7 @@ Plotting = True
 
 if Plotting:
     # create a figure with 2 subplots, left the path, right the pheromone matrix
-    fig, axs = plt.subplots(1, 3, figsize=(15, 5))
+    fig, axs = plt.subplots(1, 3, figsize=(15, 6))
     fig.suptitle('Pub Crawl')
 
     # create a scatter plot of the pubs
@@ -119,11 +119,19 @@ if Plotting:
     # plot the connections between the pubs
     connection_lines, = axs[0].plot([], [], 'k-')
 
-    # create a second figure where the pheromone matrix is plotted
-    axs[1].imshow(pheromoneMatrix, cmap='hot', interpolation='nearest')
-    axs[1].set_title('Pheromone Matrix')
+    # # create a second figure where the pheromone matrix is plotted
+    # axs[1].imshow(pheromoneMatrix, cmap='hot', interpolation='nearest')
+    # axs[1].set_title('Pheromone Matrix')
     # turn off grid
     axs[1].grid(False)
+
+    # create a second figure where the pheromone matrix is shown with a legend for the cmap
+    image = axs[1].imshow(pheromoneMatrix, cmap='hot', interpolation='nearest')
+    axs[1].set_title('Pheromone Matrix')
+
+    # Add a horizontal colorbar below the plot
+    colorbar = plt.colorbar(image, ax=axs[1], orientation='horizontal', pad=0.1)  # Adjust the pad as needed
+    colorbar.set_label('Pheromone value')  # You can customize the label as needed
 
     # create a third figure where the pathLength is y and the iteration is x
     # pathLengthPlot, = axs[2].plot([], [], '--x')
@@ -204,8 +212,9 @@ while(iter < maxIter):
 
 
                 # update the figure title to the minimal path length and iteration
-                fig.suptitle('Travel path, depending on traveltime, opening hours and queue \nPub Crawl, iteration: ' + str(iter*(popSize)+(i+1)) + ', path length: ' + str(int(minimumPathLength)))
-
+                # fig.suptitle('Travel path, depending on traveltime, opening hours and queue \nPub Crawl, iteration: ' + str(iter*(popSize)+(i+1)) + ', path length: ' + str(int(minimumPathLength)))
+                fig.suptitle(f'Travel path, depending on traveltime, opening hours and queue \nPub Crawl, iteration:  {iter * popSize + (i + 1)}, path length: {minimumPathLength:.3f}', y=0.98)
+                
                 plt.pause(0.01)
 
         pathCollection[i,:] = path
