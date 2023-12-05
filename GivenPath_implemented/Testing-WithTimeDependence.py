@@ -13,8 +13,13 @@ import Ant
 import Logger
 # import randomPubsInit
 
+# %%
+
+
+# %%
+
 # population size of ants
-popSize = 19
+popSize = 50
 NNDistance = 18.47
 
 # simulation paramters
@@ -27,7 +32,7 @@ rho = 0.02
 time = 0
 timeMax = int(60*12)            # 12 hours in minutes - 3pm to 3am 
 iter = 0
-maxIter = 2000
+maxIter = 1000
 
 
 # velocity of an ant
@@ -73,9 +78,7 @@ for i in range(len(travelTimeMatrix)):
 travelTimeMatrix[4,17] = distanceMatrix[4,17] / 83.3
 travelTimeMatrix[17,4] = distanceMatrix[17,4] / 83.3
 
-
-
-        
+       
 
 # %%
 # Ant colony
@@ -154,8 +157,8 @@ while(iter < maxIter):
         # set ant timer to 0
         ant.setTime(0)
         path = PCF.generatePath(pheromoneMatrix, visibilityMatrix, travelTimeMatrix, alpha, beta, Pubs, ant)
-        pathLength = PCF.getPathLength(path, Pubs, travelTimeMatrix)
-        #pathLength = PCF.getPathDuration(ant)
+        #pathLength = PCF.getPathLength(path, Pubs)
+        pathLength = PCF.getPathDuration(ant)
         pathDuration = PCF.getPathDuration(ant)
 
         # update the minimal path
@@ -197,11 +200,12 @@ while(iter < maxIter):
                 axs[2].set_xlim(10, iter*(popSize)+(i+1))
                 if minimumPathLength > LengthMax:
                     LengthMax = minimumPathLength
-                    axs[2].set_ylim(0, int(minimumPathLength*1.1))
+                    axs[2].set_ylim(300, int(minimumPathLength*1.1))
 
 
                 # update the figure title to the minimal path length and iteration
-                fig.suptitle(f'Nearest Neighbour, depending on traveltime \nPub Crawl, iteration: {iter * popSize + (i + 1)}, path length: {minimumPathLength:.3f}')
+                fig.suptitle('Travel path, depending on traveltime, opening hours and queue \nPub Crawl, iteration: ' + str(iter*(popSize)+(i+1)) + ', path length: ' + str(int(minimumPathLength)))
+
                 plt.pause(0.01)
 
         pathCollection[i,:] = path
@@ -217,15 +221,9 @@ while(iter < maxIter):
             bestIteration = iter
 
     # update the pheromone matrix
-    deltaPheromoneMatrix = PCF.getDeltaPheromoneMatrix(pathCollection, pathLengthCollection)
-    #deltaPheromoneMatrix = PCF.getDeltaPheromoneMatrix(pathCollection, pathDurationCollection)
+    # deltaPheromoneMatrix = PCF.getDeltaPheromoneMatrix(pathCollection, pathLengthCollection)
+    deltaPheromoneMatrix = PCF.getDeltaPheromoneMatrix(pathCollection, pathDurationCollection)
     pheromoneMatrix = PCF.updatePheromoneMatrix(pheromoneMatrix, deltaPheromoneMatrix, rho)
-
-# save the figure
-
-#str(tau0) and limit 3 digits behind comma
-#str(f'{tau0:.3f}')
-
 
 # Plotting parameters as a text box with LaTeX formatting
 axs[2].text(0.95, 0.25, r'$\textbf{Population size}$: ' + str(popSize) +
@@ -238,7 +236,7 @@ axs[2].text(0.95, 0.25, r'$\textbf{Population size}$: ' + str(popSize) +
             bbox={'facecolor': 'white', 'alpha': 0.5, 'pad': 10},
             usetex=True)
 if Plotting:
-    plt.savefig('NearestNeighbour_PubCrawl.svg', format='svg')
+    plt.savefig('Queue_PubCrawl.svg', format='svg')
     print("Figure saved")
 
 
