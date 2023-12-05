@@ -105,19 +105,33 @@ def rouletteWheelSelection(Vector):
 
     return index
 
-def getPathLength(Path, pubs):
+# def getPathLength(Path, pubs):
+#     # init the path length
+#     pathLength = 0
+
+#     # loop over all nodes in the path
+#     for i in range(len(Path)-1):
+
+#         distance = getDistance(pubs[Path[i]], pubs[Path[i+1]])
+#         # add the distance to the path length
+#         pathLength = pathLength + distance
+
+#     # RETURN TO ORIGIN NOT INCLUDING
+
+#     return pathLength
+
+def getPathLength(Path, pubs,travelTimeMatrix):
     # init the path length
     pathLength = 0
 
     # loop over all nodes in the path
     for i in range(len(Path)-1):
 
-        distance = getDistance(pubs[Path[i]], pubs[Path[i+1]])
+        travelTime = travelTimeMatrix[Path[i], Path[i+1]]
+        # distance = getDistance(pubs[Path[i]], pubs[Path[i+1]])
         # add the distance to the path length
-        pathLength = pathLength + distance
-
-    # RETURN TO ORIGIN NOT INCLUDING
-
+        pathLength = pathLength + travelTime
+    
     return pathLength
 
 def getDeltaPheromoneMatrix(pathCollection, pathLengthCollection):

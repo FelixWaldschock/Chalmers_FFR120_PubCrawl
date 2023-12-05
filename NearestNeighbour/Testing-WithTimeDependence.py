@@ -154,7 +154,7 @@ while(iter < maxIter):
         # set ant timer to 0
         ant.setTime(0)
         path = PCF.generatePath(pheromoneMatrix, visibilityMatrix, travelTimeMatrix, alpha, beta, Pubs, ant)
-        pathLength = PCF.getPathLength(path, Pubs)
+        pathLength = PCF.getPathLength(path, Pubs, travelTimeMatrix)
         #pathLength = PCF.getPathDuration(ant)
         pathDuration = PCF.getPathDuration(ant)
 
@@ -197,12 +197,11 @@ while(iter < maxIter):
                 axs[2].set_xlim(10, iter*(popSize)+(i+1))
                 if minimumPathLength > LengthMax:
                     LengthMax = minimumPathLength
-                    axs[2].set_ylim(100, int(minimumPathLength*1.1))
+                    axs[2].set_ylim(0, int(minimumPathLength*1.1))
 
 
                 # update the figure title to the minimal path length and iteration
-                fig.suptitle('Nearest Neighbour, depending on traveltime \nPub Crawl, iteration: ' + str(iter*(popSize)+(i+1)) + ', path length: ' + str(int(minimumPathLength)))
-
+                fig.suptitle(f'Nearest Neighbour, depending on traveltime \nPub Crawl, iteration: {iter * popSize + (i + 1)}, path length: {minimumPathLength:.3f}')
                 plt.pause(0.01)
 
         pathCollection[i,:] = path
