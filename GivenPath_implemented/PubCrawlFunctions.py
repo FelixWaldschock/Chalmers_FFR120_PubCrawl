@@ -45,7 +45,7 @@ def generatePath(pheromoneMatrix, visibilityMatrix, travelTimeMatrix, alpha, bet
     # start the time counter
     time = Ant.getTime()
 
-    givenPath = [17,4,2,1,5,18,15,7,6,0,3,14,13,12,9,16,8,11,10]
+    givenPath = [4,17,2,1,18,11,5,0,6,12,8,14,13,10,9,16,15,3,7]
 
     tabuList = []
     currentNode = givenPath[0]
